@@ -8,17 +8,23 @@ class Maze:
         self.grid = self.initGrid()
 
     def initGrid(self):
-        grid = np.empty((3,3), dtype=object)
+        grid = np.empty((self.dim, self.dim), dtype=object)
         for x in range(self.dim):
             for y in range(self.dim):
-                grid[x, y] = Cell()
+                grid[x, y] = Cell(x, y)
         return grid
 
     def get(self, xy):
         return self.get(xy[0], xy[1])
 
     def get(self, x, y):
-        return self.grid[x, y]
+        if self.isCell(x, y):
+            return self.grid[x, y]
+        else:
+            return None
+
+    def getbydir(self, x, y, dir):
+        return self.get(x + dir.hor, y + dir.ver)
 
     def connect(self, xy, dir):
         self.connect(xy[0], xy[1], dir)
@@ -46,7 +52,7 @@ class Maze:
             for x in range(self.dim): # draw maze cells
                 cell = self.grid[x, y]
                 if cell.visited:
-                    res += "X"
+                    res += " "
                 else:
                     res += "O"
                 if cell.walls[Direction.EAST]:
@@ -60,7 +66,9 @@ class Maze:
         return res
 
 class Cell:
-    def __init__(self):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.visited = False
         self.walls = {}
         for dir in Direction:
