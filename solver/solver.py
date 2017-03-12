@@ -33,6 +33,6 @@ class DepthFirstSolver:
             if not foundnext:
                 path.pop()
                 curcells.pop()
-        logging.debug("Took %d steps", numsteps)
+        logging.info("Maze solving took %d steps", numsteps)
 
         return (src, dst, path)

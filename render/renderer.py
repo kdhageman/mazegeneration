@@ -23,7 +23,7 @@ class Renderer:
         plt.imshow(mazearray.T[::1])
         plt.gray()
         plt.imshow(patharray.T[::1], cmap=cmap, alpha=0.75)
-        plt.title("{}x{} maze".format(maze.dim, maze.dim))
+        plt.title("{}x{}".format(maze.dim, maze.dim))
         if interval is None:
             plt.show()
         else:
