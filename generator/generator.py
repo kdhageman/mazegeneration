@@ -1,4 +1,4 @@
-from random import randrange, shuffle
+from random import randrange
 import logging
 from maze.maze import Maze, Direction
 
@@ -16,7 +16,7 @@ class DepthFirstGenerator:
 
         while len(self.stack) > 0:
             cursearch = self.stack[-1]
-            randdirs = self.randdirs()
+            randdirs = Direction.randdirs()
 
             foundnext = False
             for dir in randdirs: # search for a new cell to explore
@@ -34,11 +34,3 @@ class DepthFirstGenerator:
             for y in range(dim):
                 self.maze.get(x, y).visited = False
         return self.maze
-
-    def randdirs(self):
-        result = [0 for x in range(4)]
-        randindices = [i for i in range(4)]
-        shuffle(randindices)
-        for i, dir in enumerate(Direction):
-            result[randindices[i]] = dir
-        return result

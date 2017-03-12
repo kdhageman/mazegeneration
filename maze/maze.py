@@ -1,3 +1,5 @@
+from random import shuffle
+
 import numpy as np
 from enum import Enum
 import logging
@@ -86,7 +88,7 @@ class Maze:
                     res[2 * x + 1, 2 * (y + 1)] = 0
                 else:  # south is no wall
                     res[2 * x + 1, 2 * (y + 1)] = 1
-        return res.T[::1] # transpose
+        return res
 
 
 class Cell:
@@ -100,6 +102,11 @@ class Cell:
 
     def open(self, dir):
         self.walls[dir] = False
+
+    def __eq__(self, other):
+        if not isinstance(other, Cell):
+            return False
+        return self.x == other.x and self.y == other.y
 
 
 class Direction(Enum):
@@ -121,3 +128,12 @@ class Direction(Enum):
             return Direction.SOUTH
         if self == Direction.SOUTH:
             return Direction.NORTH
+
+    @staticmethod
+    def randdirs():
+        result = [0 for x in range(4)]
+        randindices = [i for i in range(4)]
+        shuffle(randindices)
+        for i, dir in enumerate(Direction):
+            result[randindices[i]] = dir
+        return result
