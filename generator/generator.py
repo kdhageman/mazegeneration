@@ -1,6 +1,7 @@
 from random import randrange
 import logging
 from maze.maze import Maze, Direction
+import progressbar
 
 
 class DepthFirstGenerator:
@@ -14,6 +15,8 @@ class DepthFirstGenerator:
         self.stack = [(x, y)]
         self.maze.get(x, y).visited = True
 
+        self.initbar(dim*dim)
+        i = 0
         while len(self.stack) > 0:
             cursearch = self.stack[-1]
             randdirs = Direction.randdirs()
@@ -26,6 +29,8 @@ class DepthFirstGenerator:
                     candidate.visited = True # set new node as visited
                     self.stack.append((candidate.x, candidate.y))# set new cell as next explorable node
                     foundnext = True
+                    i += 1
+                    self.updatebar(i)
                     break
             if not foundnext:
                 self.stack.pop()
@@ -33,4 +38,16 @@ class DepthFirstGenerator:
         for x in range(dim):
             for y in range(dim):
                 self.maze.get(x, y).visited = False
+        self.finishbar()
         return self.maze
+
+    def initbar(self, max):
+        self.bar = progressbar.ProgressBar(maxval=max, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+        self.bar.start()
+        self.bar.update(0)
+
+    def updatebar(self, value):
+        self.bar.update(value)
+
+    def finishbar(self):
+        self.bar.finish()
