@@ -2,6 +2,7 @@ import numpy as np
 from enum import Enum
 import logging
 
+
 class Maze:
     def __init__(self, dim):
         self.dim = dim
@@ -30,9 +31,9 @@ class Maze:
         self.connect(xy[0], xy[1], dir)
 
     def connect(self, x, y, dir):
-        if self.isCell(x, y) and self.isCell(x+dir.hor, y+dir.ver):
+        if self.isCell(x, y) and self.isCell(x + dir.hor, y + dir.ver):
             self.grid[x, y].open(dir)
-            self.grid[x+dir.hor, y+dir.ver].open(dir.opposite())
+            self.grid[x + dir.hor, y + dir.ver].open(dir.opposite())
         else:
             logging.debug("Failed to connect (%s, %s, %s): not a neighboring cell", x, y, dir.name)
 
@@ -42,14 +43,14 @@ class Maze:
     def __str__(self):
         res = ""
         for y in range(self.dim):
-            for x in range(self.dim): # draw maze edges above cells
+            for x in range(self.dim):  # draw maze edges above cells
                 cell = self.grid[x, y]
                 if cell.walls[Direction.NORTH]:
                     res += "+-"
                 else:
                     res += "+ "
             res += "+\n|"
-            for x in range(self.dim): # draw maze cells
+            for x in range(self.dim):  # draw maze cells
                 cell = self.grid[x, y]
                 if cell.visited:
                     res += " "
@@ -65,6 +66,29 @@ class Maze:
         res += "+"
         return res
 
+    def toimagearray(self):
+        res = np.empty((2 * self.dim + 1, 2 * self.dim + 1))
+        # fill top row and left column
+        for i in range(2 * self.dim + 1):
+            res[i, 0] = 0
+            res[0, i] = 0
+        # loop over all cells
+        for x in range(self.dim):
+            for y in range(self.dim):
+                res[2 * x + 1, 2 * y + 1] = 1
+                res[2 * (x + 1), 2 * (y + 1)] = 0  # south-east is always wall
+                cell = self.grid[x, y]
+                if cell.walls[Direction.EAST]:  # east is wall
+                    res[2 * (x + 1), 2 * y + 1] = 0
+                else:  # east is no wall
+                    res[2 * (x + 1), 2 * y + 1] = 1
+                if cell.walls[Direction.SOUTH]:  # south is wall
+                    res[2 * x + 1, 2 * (y + 1)] = 0
+                else:  # south is no wall
+                    res[2 * x + 1, 2 * (y + 1)] = 1
+        return res.T[::1] # transpose
+
+
 class Cell:
     def __init__(self, x, y):
         self.x = x
@@ -76,6 +100,7 @@ class Cell:
 
     def open(self, dir):
         self.walls[dir] = False
+
 
 class Direction(Enum):
     NORTH = (0, -1)
@@ -96,4 +121,3 @@ class Direction(Enum):
             return Direction.SOUTH
         if self == Direction.SOUTH:
             return Direction.NORTH
-

@@ -29,6 +29,10 @@ class DepthFirstGenerator:
                     break
             if not foundnext:
                 self.stack.pop()
+        # set all cells as unvisited
+        for x in range(dim):
+            for y in range(dim):
+                self.maze.get(x, y).visited = False
         return self.maze
 
     def randdirs(self):
