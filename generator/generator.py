@@ -42,7 +42,7 @@ class DepthFirstGenerator:
         return self.maze
 
     def initbar(self, max):
-        self.bar = progressbar.ProgressBar(maxval=max, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+        self.bar = progressbar.ProgressBar(maxval=max, term_width=30, widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
         self.bar.start()
         self.bar.update(0)
 
