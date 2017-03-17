@@ -1,10 +1,10 @@
 #!  /usr/bin/env python3
 import sys
 import time
-from generator.generator import DepthFirstGenerator
+from generator.generator import *
 from maze.maze import Cell
 from render.renderer import Renderer
-from solver.solver import DepthFirstSolver
+from solver.solver import *
 import logging
 
 
@@ -16,7 +16,7 @@ def main():
         sys.exit(-1)
     dim = int(sys.argv[1])
 
-    (maze, passed) = timed(DepthFirstGenerator().generate, dim)
+    (maze, passed) = timed(RandomGenerator().generate, dim)
     logging.info("Generation took {:0.3f} seconds".format(passed))
 
     ((src, dst, path), passed) = timed(DepthFirstSolver().solve, maze, Cell(0, 0), Cell(dim - 1, dim - 1))

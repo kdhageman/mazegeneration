@@ -42,6 +42,17 @@ class Maze:
     def isCell(self, x, y):
         return 0 <= x < self.dim and 0 <= y < self.dim
 
+    def explorables(self, xy):
+        return self.explorables(xy[0], xy[1])
+
+    def explorables(self, x, y):
+        count = 0
+        for dir in Direction:
+            n = self.getbydir(x, y, dir)
+            if n is not None and not n.visited:
+                count += 1
+        return count
+
     def __str__(self):
         res = ""
         for y in range(self.dim):

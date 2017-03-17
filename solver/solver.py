@@ -35,4 +35,9 @@ class DepthFirstSolver:
                 curcells.pop()
         logging.info("Maze solving took %d steps", numsteps)
 
-        return (src, dst, path)
+        return src, dst, path
+
+class EmptySolver:
+
+    def solve(self, maze, src, dst):
+        return src, dst, []
